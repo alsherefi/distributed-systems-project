@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Event{% endblock %}
+
+{% block content %}
+<div class="clearfix">
+  <a class="btn btn-info left" href="{% url 'calendar' %}">
+    Calendar
+  </a>
+</div>
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                {{ field.label }} <strong>{{ error | escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ field.label }} <strong>{{ error | escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<form method="POST">
+  {% csrf_token %}
+  <table class="form form-table">
+    {{ form }}
+
+    {% if can_submit %}
+    <tr>
+      <td colspan="2">
+        <button type="submit" class="btn btn-info right">
+          Submit
+        </button>
+      </td>
+    </tr>
+    {% endif %}
+
+  </table>
+</form>
+
+{% if can_delete %}
+<form action="{% url 'event_delete' event_id=event_id %}" method="get" class="clearfix">
+    <button type="submit" class="btn btn-info left">
+      Delete
+    </button>
+</form>
+{% endif %}
+
+<br>
+<br>
+
+{% endblock %}
